@@ -1,0 +1,4 @@
+[submodule "common/linux"]
+	path = common/linux
+	url = https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+	branch = linux-5.13.y
