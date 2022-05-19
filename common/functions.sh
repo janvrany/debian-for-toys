@@ -80,7 +80,7 @@ function ensure_ROOT() {
         ROOT=$(realpath "$1")
         return 0
     elif [ \( \( -f "$1" \) -a \( -w "$1" \) \) -o \( -b "$1" \) ]; then
-        ROOT=$(mktemp -d)
+        ROOT=$(realpath $(mktemp -d))
         mount_ROOT "$1"
         return 0
     else
@@ -99,6 +99,7 @@ function mount_ROOT() {
     if [ -b "$1" ]; then
         sudo mount "$1" "${ROOT}"
     else
+        #guestmount -a "$1" -m /dev/sda "${ROOT}"
         sudo mount -o loop "$1" "${ROOT}"
     fi
     bind_filesystems
@@ -121,6 +122,12 @@ function umount_ROOT() {
     fi
     if grep "${ROOT}" /etc/mtab > /dev/null; then
         echo "I: umounting '${ROOT}'"
-        sudo umount "$ROOT"
+        fstype=$(grep "${ROOT}" /etc/mtab | cut -d ' ' -f 3)
+        if [ "$fstype" == "fuse" ]; then
+            #guestunmount "${ROOT}"
+            sudo umount "$ROOT"
+        else
+            sudo umount "$ROOT"
+        fi
     fi
 }
