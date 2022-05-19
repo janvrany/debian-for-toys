@@ -2,3 +2,7 @@
 	path = common/linux
 	url = https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
 	branch = linux-5.13.y
+[submodule "riscv64/opensbi"]
+	path = riscv64/opensbi
+	url = https://github.com/riscv-software-src/opensbi.git
+	branch = v1.0

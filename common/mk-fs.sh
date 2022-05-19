@@ -16,6 +16,10 @@ if [[ -z $DEBIAN_RELEASE ]]; then
     DEBIAN_RELEASE=testing
 fi
 
+if [[ -z $DEBIAN_SOURCES ]]; then
+    DEBIAN_SOURCES="deb http://deb.debian.org/debian $DEBIAN_RELEASE main contrib"
+fi
+
 ensure_ROOT "$1"
 
 # ensure_ROOT mount /proc, /sys, /dev/pts and /dev/shm in order to allow
@@ -69,7 +73,7 @@ mmdebstrap \
     $arch_hooks_arg \
     $board_hooks_arg \
     $DEBIAN_RELEASE "$ROOT" \
-    "deb http://deb.debian.org/debian $DEBIAN_RELEASE main contrib"
+    "$DEBIAN_SOURCES"
 
 # Archive and cleanup downloaded packages
 ls    $(realpath $ROOT)/var/cache/apt/archives/*.deb

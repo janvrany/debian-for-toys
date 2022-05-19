@@ -4,6 +4,9 @@ A (personal) set of scripts to build bootable Debian images for various architec
 
 ## Supported toys
 
+* RISC-V
+  * [RISC-V 64 QEMU](riscv64/qemu/README.md)
+
 * POWER
   * [PPC64le QEMU](ppc64el/qemu/README.md)
 
