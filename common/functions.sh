@@ -99,8 +99,29 @@ function mount_ROOT() {
     if [ -b "$1" ]; then
         sudo mount "$1" "${ROOT}"
     else
-        #guestmount -a "$1" -m /dev/sda "${ROOT}"
-        sudo mount -o loop "$1" "${ROOT}"
+        parts=$(guestfish -a "$1" run : list-filesystems | grep ext4 | cut -d : -f 1)
+        for part in $parts; do
+            if [ ! -z "ROOT_PART" ]; then
+                ROOT_PART=$part
+            else
+                echo "E: Multiple ext4 filesystems in '$1': $ROOT_PART and $part"
+                return 1
+            fi
+        done
+        case "$ROOT_PART" in
+            /dev/sda[1-9])
+                sudo \
+                guestmount -a "$1" -m $ROOT_PART:/:acl,user_xattr -o allow_other -o kernel_cache "${ROOT}"
+                ;;
+            /dev/sda)
+                # Whole device, mount using mount -o loop as this is way faster
+                # than guestmount
+                sudo mount -o loop "$1" "${ROOT}"
+                ;;
+            *)
+                echo "E: Unsupported root partition type in '$1': $ROOT_PART"
+                return 1
+        esac
     fi
     bind_filesystems
 
@@ -124,6 +145,7 @@ function umount_ROOT() {
         echo "I: umounting '${ROOT}'"
         fstype=$(grep "${ROOT}" /etc/mtab | cut -d ' ' -f 3)
         if [ "$fstype" == "fuse" ]; then
+            # sudo \
             #guestunmount "${ROOT}"
             sudo umount "$ROOT"
         else

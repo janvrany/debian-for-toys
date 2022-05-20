@@ -17,9 +17,22 @@ chroot "${ROOT}" /usr/bin/apt-get --allow-unauthenticated -y install \
     nfs-client sudo bash-completion tmux adduser acl socat git vim ethtool \
     texinfo python3-dev flex bison libexpat1-dev libncurses-dev gawk \
     libncurses5-dev libncursesw5-dev procps udev locales zip unzip \
-    systemd systemd-sysv \
-    lsb-release \
+    lsb-release dbus \
     # libgnutls30 \
+
+# When installing systemd, we have to umount /proc in
+# chroot. This is because setting ACLs on guestmount-mounted
+# filesystem does not work - despite using acl,user_xattr ext4
+# options. Umounting /proc causes postinst script to skip
+# ACL setting.
+#
+# See https://salsa.debian.org/systemd-team/systemd/-/blob/debian/master/debian/systemd.postinst#L46-L53
+#
+# Sigh!
+chroot "${ROOT}" umount /proc
+chroot "${ROOT}" /usr/bin/apt-get --allow-unauthenticated -y install \
+    systemd systemd-sysv
+chroot "${ROOT}" mount -t proc proc /proc
 
 # Following are needed for OMR / OpenJ9
 chroot "${ROOT}" /usr/bin/apt-get --allow-unauthenticated -y install \
