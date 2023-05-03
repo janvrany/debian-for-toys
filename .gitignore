@@ -1,4 +1,8 @@
-linux
-cache
+config-local.sh
+config-linux-local.txt
+*/*/build
 *.img
 *.qcow2
+*.vfat
+*.ext4
+*/*/images

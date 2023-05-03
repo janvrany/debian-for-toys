@@ -97,6 +97,13 @@ CONFIG_NFS_V4_2=y
 CONFIG_NFS_FSCACHE=y
 CONFIG_ROOT_NFS=y
 
+# Following is needed for NFS
+CONFIG_FILE_LOCKING=y
+CONFIG_MANDATORY_FILE_LOCKING=y
+CONFIG_MULTIUSER=y
+
+# Following is needed for NFS root
+CONFIG_IP_PNP=y
 
 # Required by systemd
 # https://cgit.freedesktop.org/systemd/systemd/tree/README
@@ -123,3 +130,18 @@ CONFIG_EFIVAR_FS=y
 CONFIG_EFI_PARTITION=y
 CONFIG_RT_GROUP_SCHED=n
 CONFIG_AUDIT=n
+
+# Required for OMR port library tests
+CONFIG_CPUSETS=y
+CONFIG_PROC_PID_CPUSET=y
+CONFIG_MEMCG=y
+CONFIG_MEMCG_KMEM=y
+
+# For /proc/config.gz
+CONFIG_IKCONFIG=y
+CONFIG_IKCONFIG_PROC=y
+
+# New 6.0 options
+CONFIG_GCC_PLUGINS=y
+CONFIG_GCC_PLUGIN_LATENT_ENTROPY=n
+CONFIG_INIT_STACK_NONE=y

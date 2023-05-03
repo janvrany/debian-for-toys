@@ -17,7 +17,7 @@ if [ ! \( -b "$FILESYSTEM_IMAGE" -o -f "$FILESYSTEM_IMAGE" \) ]; then
 fi
 
 KERNEL_ARCH=powerpc
-KERNEL_IMAGE=$(realpath $(dirname $0))/linux/arch/$KERNEL_ARCH/boot/zImage.pseries
+KERNEL_IMAGE=$(dirname $0)/build/linux/arch/$KERNEL_ARCH/boot/zImage.pseries
 
 if [ ! -f "$KERNEL_IMAGE" ]; then
     echo "E: Invalid KERNEL_IMAGE (no such file): $KERNEL_IMAGE"

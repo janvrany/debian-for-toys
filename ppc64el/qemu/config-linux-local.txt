@@ -1,0 +1,8 @@
+# DO NOT COMMIT!
+# Local kernel tunables, there's no need to change anything.
+
+# CONFIG_INITRAMFS_SOURCE="abs/path/to/rootfs.cpio"
+#
+# or
+# CONFIG_CMDLINE_BOOL=y
+# CONFIG_CMDLINE="root=/dev/nfs rw nfsroot=192.168.1.1:/srv/some/root,vers=3"
