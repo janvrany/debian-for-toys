@@ -2,7 +2,7 @@
 
 set -e
 
-. $(dirname $0)/../../common/functions.sh
+. $(dirname $0)/../../3rdparty/toolbox/functions.sh
 
 if [ -z "$1" ]; then
     echo "usage: $(basename $0) <ROOT>"
@@ -10,6 +10,5 @@ if [ -z "$1" ]; then
 fi
 
 ensure_ROOT "$1"
-unbind_filesystems
 
 sudo arch-chroot "${ROOT}"

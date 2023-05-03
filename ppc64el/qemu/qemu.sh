@@ -2,7 +2,7 @@
 
 set -e
 
-. $(dirname $0)/../../common/functions.sh
+. $(dirname $(realpath ${BASH_SOURCE[0]}))/../../3rdparty/toolbox/functions.sh
 
 if [ -z "$1" ]; then
     echo "usage: $(basename $0) <FILESYSTEM_IMAGE>"

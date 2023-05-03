@@ -5,3 +5,9 @@
 [submodule "3rdparty/opensbi"]
 	path = 3rdparty/opensbi
 	url = https://github.com/riscv-software-src/opensbi.git
+[submodule "toolbox"]
+	path = 3rdparty/toolbox
+	url = https://github.com/janvrany/debian-imaging-toolbox.git
+[submodule "3rdparty/toolbox"]
+	path = 3rdparty/toolbox
+	url = https://github.com/janvrany/debian-imaging-toolbox

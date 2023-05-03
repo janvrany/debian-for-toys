@@ -1,0 +1,1 @@
+../../common/mk-fs-hooks/customize00-setup-basics.sh
