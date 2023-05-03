@@ -8,7 +8,7 @@ KERNEL_IMAGE=$(KERNEL_OUT_DIR)/arch/$(KERNEL_ARCH)/boot/Image
 sinclude ../../common/mk-os.mk
 
 OPENSBI_PLATFORM=generic
-OPENSBI_SRC_DIR=../opensbi
+OPENSBI_SRC_DIR=../../3rdparty/opensbi
 OPENSBI_OUT_DIR=$(OPENSBI_SRC_DIR)/build/platform/$(OPENSBI_PLATFORM)/firmware
 
 # Following is for QEMU

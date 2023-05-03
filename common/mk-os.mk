@@ -8,7 +8,7 @@ ifndef KERNEL_CROSS_COMPILE
 endif
 
 
-KERNEL_SRC_DIR ?= $(shell realpath ../../common/linux)
+KERNEL_SRC_DIR ?= $(shell realpath ../../3rdparty/linux)
 KERNEL_OUT_DIR ?= $(shell realpath linux)
 
 KERNEL_IMAGE ?= $(KERNEL_OUT_DIR)/arch/$(KERNEL_ARCH)/boot/Image
