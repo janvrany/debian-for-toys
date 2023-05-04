@@ -8,6 +8,7 @@
 [submodule "toolbox"]
 	path = 3rdparty/toolbox
 	url = https://github.com/janvrany/debian-imaging-toolbox.git
-[submodule "3rdparty/toolbox"]
-	path = 3rdparty/toolbox
-	url = https://github.com/janvrany/debian-imaging-toolbox
+[submodule "3rdparty/u-boot"]
+	path = 3rdparty/u-boot
+	url = https://source.denx.de/u-boot/u-boot.git
+	branch = v2023.01

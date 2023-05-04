@@ -2,7 +2,7 @@
 
 set -e
 
-. $(dirname $0)/../../common/functions.sh
+. $(dirname $0)/../../3rdparty/toolbox/functions.sh
 
 if [ -z "$1" ]; then
     echo "usage: $(basename $0) <FILESYSTEM_IMAGE>"
@@ -16,29 +16,25 @@ if [ ! \( -b "$FILESYSTEM_IMAGE" -o -f "$FILESYSTEM_IMAGE" \) ]; then
     exit 1
 fi
 
-KERNEL_ARCH=riscv
-KERNEL_IMAGE=$(realpath $(dirname $0))/linux/arch/$KERNEL_ARCH/boot/Image
+U_BOOT_SPL=$(dirname $0)/build/u-boot/spl/u-boot-spl
+U_BOOT_PROPER=$(dirname $0)/build/u-boot/u-boot.itb
 
-if [ ! -f "$KERNEL_IMAGE" ]; then
-    echo "E: Invalid KERNEL_IMAGE (no such file): $KERNEL_IMAGE"
+if [ ! -f "$U_BOOT_SPL" ]; then
+    echo "E: Invalid U_BOOT_SPL (no such file): $U_BOOT_SPL"
     echo
-    echo "I: Did you forgot to run 'mk-os.mk' script?"
+    echo "I: Did you forgot to run 'mk-ub.mk' script?"
+    exit 2
+fi
+if [ ! -f "$U_BOOT_PROPER" ]; then
+    echo "E: Invalid U_BOOT_PROPER (no such file): $U_BOOT_PROPER"
+    echo
+    echo "I: Did you forgot to run 'mk-ub.mk' script?"
     exit 2
 fi
 
 if [ -z "$QEMU" ]; then
     QEMU=qemu-system-riscv64
 fi
-
-OPENSBI_IMAGE=$(dirname $0)/../opensbi/build/platform/generic/firmware/fw_jump.bin
-
-if [ ! -f "$OPENSBI_IMAGE" ]; then
-    echo "E: Invalid OPENSBI_IMAGE (no such file): $OPENSBI_IMAGE"
-    echo
-    echo "I: Did you forgot to run 'mk-os.mk' script?"
-    exit 2
-fi
-
 
 echo "To (SSH) connect to running Debian, do"
 echo
@@ -50,16 +46,39 @@ echo "gdbserver:"
 echo
 echo "    (gdb) target remote localhost:7000"
 echo
-#if ! confirm "Continue"; then
-#    exit 0
-#fi
+if ! confirm "Continue"; then
+    exit 0
+fi
 
+#
+# Following should work [1] but it does not with
+# recent U-Boot [1]
+#
+# [1]: https://www.qemu.org/docs/master/system/riscv/virt.html
+# [2]: https://lore.kernel.org/all/20230112001835.GS3787616@bill-the-cat/T/
+#
+if [ "a" == "x" ]; then
 ${QEMU} -nographic \
     -machine virt \
     -m 2G \
     -smp cpus=4 \
-    -bios "$OPENSBI_IMAGE" \
-    -kernel "$KERNEL_IMAGE" \
-    -append "root=/dev/vda rw console=ttyS0 net.ifnames=1" \
+    -bios "$U_BOOT_SPL" \
+    -device loader,file=$U_BOOT_PROPER,addr=0x80200000 \
     -drive file=${FILESYSTEM_IMAGE},format=raw,id=hd0 -device virtio-blk-device,drive=hd0 \
     -netdev user,id=net0,hostfwd=tcp::5555-:22,hostfwd=tcp::7000-:7000 -device virtio-net-device,netdev=net0
+else
+KERNEL_IMAGE=$(dirname $0)/../build/linux/arch/riscv/boot/Image
+#KERNEL_CMDLINE="earlyprintk rw root=/dev/vda4 rhgb rootwait rootfstype=ext4 LANG=en_US.UTF-8 net.ifnames=1"
+KERNEL_CMDLINE="earlyprintk rw root=/dev/vda4 rhgb rootwait rootfstype=ext4 LANG=en_US.UTF-8 net.ifnames=1"
+OPENSBI=$(dirname $0)/build/opensbi/platform/generic/firmware/fw_jump.bin
+${QEMU} \
+    -machine virt \
+    -m 2G \
+    -smp cpus=4 \
+    -display none -serial stdio \
+    -bios "$OPENSBI" \
+    -kernel "$KERNEL_IMAGE" \
+    -append "$KERNEL_CMDLINE" \
+    -drive file=${FILESYSTEM_IMAGE},format=raw,id=hd0 -device virtio-blk-device,drive=hd0 \
+    -netdev user,id=net0,hostfwd=tcp::5555-:22,hostfwd=tcp::7000-:7000 -device virtio-net-device,netdev=net0
+fi
