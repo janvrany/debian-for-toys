@@ -1,6 +1,7 @@
 config-local.sh
 config-linux-local.txt
 */*/build
+*/build
 *.img
 *.qcow2
 *.vfat

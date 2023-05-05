@@ -1,0 +1,56 @@
+image boot.vfat {
+        temporary = true
+        size = 32M
+        vfat {
+                file vmlinux-@CONFIG_IMAGE_KERNEL_VER@ {
+                        image = "@CONFIG_IMAGE_KERNEL_IMAGE@"
+                }
+
+                file dtb-@CONFIG_IMAGE_KERNEL_VER@ {
+                        image = "@CONFIG_IMAGE_DTB@"
+                }
+                file extlinux/extlinux.conf {
+                        image = "extlinux.conf"
+                }
+        }
+}
+
+image root.ext4 {
+        temporary = true
+        size = 120%
+        ext4 {}
+        mountpoint = "/"
+}
+
+
+image sdcard.img {
+        size = @CONFIG_IMAGE_SIZE@
+
+        hdimage {
+                partition-table-type = gpt
+        }
+
+        partition u-boot-spl {
+                partition-type-uuid = 5B193300-FC78-40CD-8002-E86C45580B47
+                offset = 17K
+                image = "u-boot/spl/u-boot-spl.bin"
+        }
+
+        partition u-boot {
+                partition-type-uuid = 2E54B353-1271-4842-806F-E436D6AF6985
+                offset = 1041K
+                image = "u-boot/u-boot.itb"
+        }
+
+        partition boot {
+                partition-type-uuid = U
+                bootable = yes
+                image = "boot.vfat"
+        }
+
+        partition root {
+                partition-type-uuid = L
+                autoresize = true
+                image = "root.ext4"
+        }
+}
