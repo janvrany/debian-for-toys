@@ -1,0 +1,15 @@
+menu title Debian Boot Options
+timeout 100
+default l0
+
+label l0
+        menu label Linux kernel @CONFIG_IMAGE_KERNEL_VER@
+        kernel /vmlinux-@CONFIG_IMAGE_KERNEL_VER@
+        fdt /dtb-@CONFIG_IMAGE_KERNEL_VER@
+        append earlyprintk rw root=/dev/mmcblk0p4 rhgb rootwait rootfstype=ext4 LANG=en_US.UTF-8 console=ttySIF0 net.ifnames=0
+
+label l0-recovery
+        menu label Linux kernel @CONFIG_IMAGE_KERNEL_VER@ (recovery mode)
+        kernel /vmlinux-@CONFIG_IMAGE_KERNEL_VER@
+        fdt /dtb-@CONFIG_IMAGE_KERNEL_VER@
+        append earlyprintk rw root=/dev/mmcblk0p4 rhgb rootwait rootfstype=ext4 LANG=en_US.UTF-8 console=ttySIF0 net.ifnames=0 single
