@@ -1,0 +1,1 @@
+../../common/mk-fs-hooks/customize50-dev-tools.sh
