@@ -104,6 +104,9 @@ CONFIG_MULTIUSER=y
 
 # Following is needed for NFS root
 CONFIG_IP_PNP=y
+CONFIG_IP_PNP_DHCP=y
+CONFIG_IP_PNP_BOOTP=y
+CONFIG_IP_PNP_RARP=y
 
 # Required by systemd
 # https://cgit.freedesktop.org/systemd/systemd/tree/README
