@@ -39,14 +39,14 @@ $(KERNEL_CONFIG_LOCAL):
 	@echo "# CONFIG_CMDLINE=\"root=/dev/nfs rw nfsroot=192.168.1.1:/srv/some/root,vers=3\"" >> $@
 
 $(KERNEL_CONFIG):: $(KERNEL_SRC_DIR) $(KERNEL_CONFIG_COMMON) $(KERNEL_CONFIG_LOCAL) | $(KERNEL_OUT_DIR)
-	$(MAKE) -C $(KERNEL_SRC_DIR) O=$(KERNEL_OUT_DIR) ARCH=$(KERNEL_ARCH) \
-		$(KERNEL_CONFIG_DEFAULT)
 	cp $(KERNEL_CONFIG_COMMON) $@
 	if [ -f $(KERNEL_CONFIG_ARCH) ]; then cat $(KERNEL_CONFIG_ARCH) >> $@; fi
 	if [ -f $(KERNEL_CONFIG_BOARD) ]; then cat $(KERNEL_CONFIG_BOARD) >> $@; fi
 	cat $(KERNEL_CONFIG_LOCAL) >> $@
-	$(MAKE) -C $(KERNEL_SRC_DIR) O=$(KERNEL_OUT_DIR) ARCH=$(KERNEL_ARCH) \
-		olddefconfig
+	cp $@ $@.tmp
+	sort $@.tmp | uniq > $@
+	rm $@.tmp
+	$(MAKE) -C $(KERNEL_SRC_DIR) O=$(KERNEL_OUT_DIR) ARCH=$(KERNEL_ARCH) olddefconfig
 
 ifneq (,$(wildcard $(KERNEL_CONFIG_ARCH)))
 $(KERNEL_CONFIG):: $(KERNEL_CONFIG_ARCH)
