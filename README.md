@@ -7,6 +7,7 @@ A (personal) set of scripts to build bootable Debian images for various architec
 * [RISC-V](riscv64/README.md)
   * QEMU (riscv64)
   * [SiFive HiFive Unleashed](https://www.sifive.com/boards/hifive-unleashed)
+  * [StarFive VisionFive 2](https://doc-en.rvspace.org/Doc_Center/visionfive_2.html)
 
 * POWER
   * [QEMU (ppc64le)](ppc64el/qemu/README.md)
@@ -57,11 +58,17 @@ For each architecture and "board" you may find following scripts:
 
 ## Other Notes & Comments
 
+* Connecting to serial console over FTDI:
+
+  ```
+  sudo screen /dev/ttyUSB0 115200
+  ```
+
 * Write SD card image to the SD card:
 
-   ```
-   pv images/sdcard.img | sudo dd of=/dev/mmcblk0 bs=32M oflag=sync
-   ```
+  ```
+  pv images/sdcard.img | sudo dd of=/dev/mmcblk0 bs=32M oflag=sync
+  ```
 
 * Create `.tar.gz` of root filesystem from disk image:
 

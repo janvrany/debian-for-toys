@@ -1,0 +1,35 @@
+menu title Debian Boot Options
+timeout 100
+default l0
+
+label l0
+        menu label Linux kernel @CONFIG_IMAGE_KERNEL_VER@
+        kernel /vmlinuz-@CONFIG_IMAGE_KERNEL_VER@
+        fdt /dtb-@CONFIG_IMAGE_KERNEL_VER@
+        append rw root=/dev/mmcblk1p4 console=ttyS0,115200 debug rootwait earlycon=sbi net.ifnames=0
+
+label l0-recovery
+        menu label Linux kernel @CONFIG_IMAGE_KERNEL_VER@ (recovery mode)
+        kernel /vmlinuz-@CONFIG_IMAGE_KERNEL_VER@
+        fdt /dtb-@CONFIG_IMAGE_KERNEL_VER@
+        append rw root=/dev/mmcblk1p4 console=ttyS0,115200 debug rootwait earlycon=sbi net.ifnames=0 single
+
+label l1
+        menu label Linux kernel 5.15-starfive-v2.11.5
+        kernel /vmlinuz-5.15-starfive-v2.11.5
+        fdt /dtb-5.15-starfive-v2.11.5
+        append rw root=/dev/mmcblk1p4 console=ttyS0,115200 debug rootwait earlycon=sbi net.ifnames=0
+
+label l1-recovery
+        menu label Linux kernel 5.15-starfive-v2.11.5 (recovery mode)
+        kernel /vmlinuz-5.15-starfive-v2.11.5
+        fdt /dtb-5.15-starfive-v2.11.5
+        append rw root=/dev/mmcblk1p4 console=ttyS0,115200 debug rootwait earlycon=sbi net.ifnames=0 single
+
+label n0
+        menu label Linux kernel @CONFIG_IMAGE_KERNEL_VER@
+        kernel /vmlinuz-@CONFIG_IMAGE_KERNEL_VER@
+        fdt /dtb-@CONFIG_IMAGE_KERNEL_VER@
+        append rw root=/dev/nfs ip=:::::eth0:dhcp nfsroot=192.168.88.254:/syst/guests/visionfive2,vers=3 nfsrootdebug console=ttyS0,115200 debug rootwait earlycon=sbi net.ifnames=0
+
+

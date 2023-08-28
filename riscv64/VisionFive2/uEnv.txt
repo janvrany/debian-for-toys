@@ -1,0 +1,5 @@
+kernel_comp_addr_r=0x90000000
+kernel_comp_size=0x10000000
+boot2=echo "HELLO WORLD"
+fatbootpart=1:3
+bootdir=/
