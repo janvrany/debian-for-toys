@@ -6,14 +6,14 @@
 
 * Install QEMU, `mmdebstrap` and PPC64le build toolchain:
   ```
-  sudo apt-get install mmdebstrap qemu-user-static qemu-system-misc binfmt-support crossbuild-essential-ppc64el
+  sudo apt-get install mmdebstrap qemu-user-static qemu-system-misc binfmt-support crossbuild-essential-ppc64el guestfish guestfs-tools
   ```
 
 ## Checking out source code
 
 ```
 git clone https://github.com/janvrany/debian-for-toys
-git -C debian-for-toys submodule update --init common/linux
+git -C debian-for-toys submodule update --init
 ```
 
 ## !!! BIG FAT WARNING !!!
@@ -54,6 +54,24 @@ They're provided for convenience. Use at your own risk.
     ```
     ./qemu.sh debian.img
     ```
+
+## Creating a libvirt domain (virtual machine)
+
+  1. Copy filesystem image and kernel to libvirt host
+
+  2. Define the domain using `virt-install`:
+
+     ```
+     virt-install \
+         --connect qemu:///system --virt-type qemu \
+         --name debian-ppc64le \
+         --arch ppc64le --memory 1024 \
+         --import \
+         --disk path=.../jenkins-debian-ppc64le,format=raw \
+         --boot kernel=.../jenkins-debian-ppc64le.vmlinuz,kernel_args="root=/dev/vda rw" \
+         --console pty,target_type=virtio \
+         --graphics none
+     ```
 
 ## Acknowledgement
 
