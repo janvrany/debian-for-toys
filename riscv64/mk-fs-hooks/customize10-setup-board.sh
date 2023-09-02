@@ -11,7 +11,25 @@ ensure_ROOT $1
 #
 # Config variables
 #
+: ${CONFIG_DEFAULT_NET_IFACE:=eth0}
 : ${CONFIG_NFS_HOME:=}
+
+#
+# Configure DHCP client ID
+#
+echo "
+
+[DHCPv4]
+#
+# Use MAC address to construct DHCP client ID (rather than IAID+DUID used
+# by systemd-networkd by default).
+#
+# This makes the DHCP server configuration for static leases much simpler,
+# since it's easier to configure and compatible with what kernel IP DHCP
+# autoconfiguration uses (such as when mounting root over NFS)
+ClientIdentifier=mac
+
+" | sudo tee -a "$ROOT/etc/systemd/network/99-$CONFIG_DEFAULT_NET_IFACE.network"
 
 #
 # Install support for NFS client
