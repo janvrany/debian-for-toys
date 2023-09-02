@@ -6,10 +6,22 @@ label l0
         menu label Linux kernel @CONFIG_IMAGE_KERNEL_VER@
         kernel /vmlinux-@CONFIG_IMAGE_KERNEL_VER@
         fdt /dtb-@CONFIG_IMAGE_KERNEL_VER@
-        append earlyprintk rw root=/dev/mmcblk0p4 rhgb rootwait rootfstype=ext4 LANG=en_US.UTF-8 console=ttySIF0 net.ifnames=0
+        append earlyprintk rw rhgb rootwait rootfstype=ext4 LANG=en_US.UTF-8 console=ttySIF0 net.ifnames=0 root=/dev/mmcblk0p4
 
 label l0-recovery
         menu label Linux kernel @CONFIG_IMAGE_KERNEL_VER@ (recovery mode)
         kernel /vmlinux-@CONFIG_IMAGE_KERNEL_VER@
         fdt /dtb-@CONFIG_IMAGE_KERNEL_VER@
-        append earlyprintk rw root=/dev/mmcblk0p4 rhgb rootwait rootfstype=ext4 LANG=en_US.UTF-8 console=ttySIF0 net.ifnames=0 single
+        append earlyprintk rw rhgb rootwait rootfstype=ext4 LANG=en_US.UTF-8 console=ttySIF0 net.ifnames=0  root=/dev/mmcblk0p4 single
+
+label n0
+        menu label Linux kernel @CONFIG_IMAGE_KERNEL_VER@ (NFS root)
+        kernel /vmlinux-@CONFIG_IMAGE_KERNEL_VER@
+        fdt /dtb-@CONFIG_IMAGE_KERNEL_VER@
+        append earlyprintk rw rhgb rootwait rootfstype=ext4 LANG=en_US.UTF-8 console=ttySIF0 net.ifnames=0 root=/dev/nfs ip=:::::eth0:dhcp nfsroot=@CONFIG_NFS_ROOT@,vers=4.2 nfsrootdebug
+
+label n0-recovery
+        menu label Linux kernel @CONFIG_IMAGE_KERNEL_VER@ (NFS root, recovery mode)
+        kernel /vmlinux-@CONFIG_IMAGE_KERNEL_VER@
+        fdt /dtb-@CONFIG_IMAGE_KERNEL_VER@
+        append earlyprintk rw rhgb rootwait rootfstype=ext4 LANG=en_US.UTF-8 console=ttySIF0 net.ifnames=0 root=/dev/nfs ip=:::::eth0:dhcp nfsroot=@CONFIG_NFS_ROOT@,vers=4.2 nfsrootdebug single

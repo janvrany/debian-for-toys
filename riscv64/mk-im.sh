@@ -25,6 +25,7 @@ kernel_out_dir=$arch_out_dir/linux
 : ${CONFIG_IMAGE_ROOTDEV:=/dev/vda4}
 : ${CONFIG_IMAGE_KERNEL_IMAGE:="$kernel_out_dir/arch/riscv/boot/Image.gz"}
 : ${CONFIG_IMAGE_DTB:=}
+: ${CONFIG_NFS_ROOT:=:}
 
 #
 # Helper function
@@ -38,6 +39,7 @@ function process_in_file {
 		-e "s#@CONFIG_IMAGE_KERNEL_VER@#$CONFIG_IMAGE_KERNEL_VER#g" \
 		-e "s#@CONFIG_IMAGE_KERNEL_IMAGE@#$CONFIG_IMAGE_KERNEL_IMAGE#g" \
 		-e "s#@CONFIG_IMAGE_DTB@#$CONFIG_IMAGE_DTB#g" \
+		-e "s#@CONFIG_NFS_ROOT@#$CONFIG_NFS_ROOT#g" \
 		"$in" > "$out"
 }
 

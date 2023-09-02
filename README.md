@@ -58,6 +58,8 @@ For each architecture and "board" you may find following scripts:
 
 ## Other Notes & Comments
 
+...mainly so I won't need to fish for them every single time :-)
+
 * Connecting to serial console over FTDI:
 
   ```
@@ -80,6 +82,20 @@ For each architecture and "board" you may find following scripts:
   ```
 
   Replace `/dev/sda4` as needed.
+
+* Extracting `.tar.gz` of root filesystem (see above) to (NFS) volume:
+
+  ```
+  tar --xattrs --acls -xf rootfs.tgz
+  ```
+
+  Note `--xattrs` and `--acls` options, they are important!
+
+* Uploading root filesystem in `build/root` to remote (NFS) server:
+
+  ```
+  sudo true; sudo tar -C build/root --xattrs --acls -zc . | pv -s 1G | ssh <server> sudo tar -C <export_dir> --xattrs --acls -zx
+  ```
 
 
 * Sometimes it happened to me that `/var/lib/dpkg/available` disappeared. This prevents `dpkg` / `apt` from removing packages. Following command fixed this for me:
