@@ -29,7 +29,6 @@ kernel_out_dir=$arch_out_dir/linux
 #
 # Helper function
 #
-
 function process_in_file {
 	local in=$1
 	local out=$2
@@ -41,6 +40,12 @@ function process_in_file {
 		-e "s#@CONFIG_IMAGE_DTB@#$CONFIG_IMAGE_DTB#g" \
 		"$in" > "$out"
 }
+
+#
+# Create build directories
+#
+mkdir -p "$board_out_dir"
+mkdir -p "$arch_out_dir"
 
 #
 # Create / compile U-Boot, Linux kernel and root filesystem
