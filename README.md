@@ -28,7 +28,7 @@ They're provided for convenience. Use at your own risk.
  1) Install required tools (QEMU, mmdebstrap and so on):
 
     ```
-    sudo apt-get install mmdebstrap qemu-user-static qemu-system-misc binfmt-support debian-ports-archive-keyring rsync device-tree-compiler genimage genext2fs dosfstool guestfish guestfs-tools
+    sudo apt-get install mmdebstrap qemu-user-static qemu-system-misc binfmt-support debian-ports-archive-keyring rsync device-tree-compiler genimage genext2fs dosfstools guestfish guestfs-tools
     ```
  2) Install build tools for each architecture you want to build image for:
 
