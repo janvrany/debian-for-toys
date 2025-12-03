@@ -12,3 +12,6 @@
 	path = 3rdparty/u-boot
 	url = https://source.denx.de/u-boot/u-boot.git
 	branch = v2023.01
+[submodule "3rdparty/amlogic-boot-fip"]
+	path = 3rdparty/amlogic-boot-fip
+	url = https://github.com/janvrany/amlogic-boot-fip
