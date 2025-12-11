@@ -1,8 +1,11 @@
-#/bin/bash
+#!/bin/bash
 
-set -e
+set -ex
 
-. $(dirname $0)/../../3rdparty/toolbox/functions.sh
+.      "$(dirname $0)/../../3rdparty/toolbox/functions.sh"
+config "$(dirname $0)/config.sh"
+config "$(dirname $0)/config-local.sh"
+
 
 if [ -z "$1" ]; then
     echo "usage: $(basename $0) <FILESYSTEM_IMAGE>"
@@ -57,28 +60,31 @@ fi
 # [1]: https://www.qemu.org/docs/master/system/riscv/virt.html
 # [2]: https://lore.kernel.org/all/20230112001835.GS3787616@bill-the-cat/T/
 #
-if [ "a" == "x" ]; then
+if [ "y" == "x" ]; then
 ${QEMU} -nographic \
     -machine virt \
-    -m 2G \
+    -m 8G \
     -smp cpus=4 \
     -bios "$U_BOOT_SPL" \
     -device loader,file=$U_BOOT_PROPER,addr=0x80200000 \
-    -drive file=${FILESYSTEM_IMAGE},format=raw,id=hd0 -device virtio-blk-device,drive=hd0 \
+    -drive file=${FILESYSTEM_IMAGE},format=raw,if=virtio \
     -netdev user,id=net0,hostfwd=tcp::5555-:22,hostfwd=tcp::7000-:7000 -device virtio-net-device,netdev=net0
 else
 KERNEL_IMAGE=$(dirname $0)/../build/linux/arch/riscv/boot/Image
 #KERNEL_CMDLINE="earlyprintk rw root=/dev/vda4 rhgb rootwait rootfstype=ext4 LANG=en_US.UTF-8 net.ifnames=1"
 KERNEL_CMDLINE="earlyprintk rw root=/dev/vda4 rhgb rootwait rootfstype=ext4 LANG=en_US.UTF-8 net.ifnames=1"
 OPENSBI=$(dirname $0)/build/opensbi/platform/generic/firmware/fw_jump.bin
+
+typeset qemu_img_fmt=$(qemu-img info $1 | grep 'file format' | cut -d ' '  -f 3)
+
 ${QEMU} \
     -machine virt \
-    -m 2G \
+    -m 8G \
     -smp cpus=4 \
     -display none -serial stdio \
     -bios "$OPENSBI" \
     -kernel "$KERNEL_IMAGE" \
     -append "$KERNEL_CMDLINE" \
-    -drive file=${FILESYSTEM_IMAGE},format=raw,id=hd0 -device virtio-blk-device,drive=hd0 \
+    -drive file=${FILESYSTEM_IMAGE},if=virtio \
     -netdev user,id=net0,hostfwd=tcp::5555-:22,hostfwd=tcp::7000-:7000 -device virtio-net-device,netdev=net0
 fi
