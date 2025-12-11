@@ -6,7 +6,7 @@ endif
 
 
 UBOOT_ARCH=riscv
-UBOOT_CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-linux-gnu-
+UBOOT_CROSS_COMPILE=riscv64-linux-gnu-
 UBOOT_OUT_DIR ?= $(shell realpath .)/build/u-boot
 
 OPENSBI_PLATFORM=generic
