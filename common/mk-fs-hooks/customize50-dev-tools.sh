@@ -28,26 +28,26 @@ chroot "${ROOT}" /usr/bin/apt-get --allow-unauthenticated -y install \
 #
 # Packages required to build (selected) projects
 #
-PACKAGES_GDB="  python3-dev,
-                libexpat1-dev,
-                libncurses-dev,
-                libncurses5-dev,
-                libncursesw5-dev,
-                libdebuginfod-dev,
-                libgmp-dev,
-                libmpfr-dev,
-                liblzma-dev,
-                libreadline-dev,
-                guile-3.0-dev,
+PACKAGES_GDB="  python3-dev
+                libexpat1-dev
+                libncurses-dev
+                libncurses5-dev
+                libncursesw5-dev
+                libdebuginfod-dev
+                libgmp-dev
+                libmpfr-dev
+                liblzma-dev
+                libreadline-dev
+                guile-3.0-dev
                 texinfo
             "
 PACKAGES_GDB_TEST="
-                dejagnu,
-                python3-unidiff,
-                python3-termcolor,
-                gfortran,
-                gnat,
-                rustc,
+                dejagnu
+                python3-unidiff
+                python3-termcolor
+                gfortran
+                gnat
+                rustc
                 libc6-dbg
             "
 
