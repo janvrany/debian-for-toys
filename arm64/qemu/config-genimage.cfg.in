@@ -1,1 +1,51 @@
-../config-genimage.cfg.in
+image boot.vfat {
+        temporary = true
+        size = 256M
+        vfat {
+                label = "EFI"
+
+                # Sigh, we need at least one file...
+                file "startup.nsh" {
+                        image = "/dev/null"
+                }
+        }
+}
+
+image root.ext4 {
+        temporary = true
+        size = 120%
+        ext4 {
+                label = "root"
+        }
+        mountpoint = "/"
+}
+
+
+image sdcard.img {
+        size = @CONFIG_IMAGE_SIZE@
+
+        hdimage {
+                partition-table-type = gpt
+                fill = yes
+        }
+
+#        partition u-boot-env {
+#                partition-type-uuid = u-boot-env
+#                offset = 2097152
+#                size = 64k
+#                fill = true
+#        }
+
+        partition efi {
+                partition-type-uuid = U
+                offset = 2097152
+                image = "boot.vfat"
+        }
+
+        partition root {
+                partition-type-uuid = L
+                size = 2G
+                autoresize = yes
+                image = "root.ext4"
+        }
+}

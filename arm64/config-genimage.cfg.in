@@ -5,7 +5,6 @@ image boot.ext4 {
                 label = "boot"
         }
         mountpoint = "/boot"
-        exec-pre = "mkdir $IMAGEMOUNTPATH/extlinux; cp $INPUTPATH/extlinux.conf $IMAGEMOUNTPATH/extlinux; ls -lr $IMAGEMOUNTPATH/extlinux 1>&2; env 1>&2"
 }
 
 image root.ext4 {

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Create complete disk image
+# Create complete disk image WITHOUT BOOTLOADER.
 #
 source "$(dirname $(realpath ${BASH_SOURCE[0]}))/../3rdparty/toolbox/functions.sh"
 config "$(dirname $0)/config.sh"
@@ -50,11 +50,6 @@ if [ ! -e "$rootfs_out_dir/etc/passwd" ]; then
 	mkdir -p "$rootfs_out_dir"
 	"$here_dir/mk-fs.sh" "$rootfs_out_dir"
 fi
-
-#
-# Generate extlinux.conf
-#
-process_in_file "$here_dir/extlinux.conf.in" "$board_out_dir/extlinux.conf"
 
 #
 # Generate config for genimage
