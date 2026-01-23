@@ -1,0 +1,48 @@
+image boot.ext4 {
+        temporary = true
+        size = 256M
+        ext4 {
+                label = "boot"
+        }
+        mountpoint = "/boot"
+}
+
+image root.ext4 {
+        temporary = true
+        size = 120%
+        ext4 {
+                label = "root"
+        }
+        mountpoint = "/"
+        exec-pre = "rm -rf $IMAGEMOUNTPATH/boot/*"
+}
+
+
+image sdcard.img {
+        size = @CONFIG_IMAGE_SIZE@
+
+        hdimage {
+                partition-table-type = mbr
+                fill = yes
+        }
+
+#        partition u-boot-env {
+#                # partition-type-uuid = u-boot-env
+#                offset = 2097152
+#                size = 64k
+#                fill = true
+#        }
+
+        partition boot {
+                partition-type = 0x83
+                offset = 2097152
+                image = "boot.ext4"
+        }
+
+        partition root {
+                partition-type = 0x83
+                size = 2G
+                autoresize = yes
+                image = "root.ext4"
+        }
+}

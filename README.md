@@ -9,6 +9,13 @@ A (personal) set of scripts to build bootable Debian images for various architec
   * [SiFive HiFive Unleashed](https://www.sifive.com/boards/hifive-unleashed)
   * [StarFive VisionFive 2](https://doc-en.rvspace.org/Doc_Center/visionfive_2.html)
 
+* AArch64
+  * QEMU (aarch64)
+  * [ODROID-N2+](https://www.hardkernel.com/shop/odroid-n2-with-4gbyte-ram-2/)
+
+* ARM (arm-linux-gnueabihf)
+  * QEMU (arm)
+
 * POWER
   * [QEMU (ppc64le)](ppc64el/qemu/README.md)
 
