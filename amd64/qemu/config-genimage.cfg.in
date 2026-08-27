@@ -1,0 +1,42 @@
+image efi.vfat {
+        temporary = true
+        size = 32M
+        vfat {
+                label = "efi"
+
+                # Sigh, we need at least one file...
+                file "empty" {
+                        image = "/dev/null"
+                }
+        }
+}
+
+image root.ext4 {
+        temporary = true
+        size = 120%
+        ext4 {
+                label = "root"
+        }
+        mountpoint = "/"
+}
+
+
+image hdd.img {
+        size = @CONFIG_IMAGE_SIZE@
+
+        hdimage {
+                partition-table-type = gpt
+        }
+
+        partition efi {
+                partition-type-uuid = U
+                bootable = yes
+                image = "efi.vfat"
+        }
+
+        partition root {
+                partition-type-uuid = L
+                autoresize = true
+                image = "root.ext4"
+        }
+}

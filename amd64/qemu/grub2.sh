@@ -1,0 +1,1 @@
+../../common/grub2.sh
