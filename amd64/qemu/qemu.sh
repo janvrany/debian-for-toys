@@ -1,0 +1,61 @@
+#/bin/bash
+
+set -e
+
+#
+# Run using QEMU
+#
+source "$(dirname $(realpath ${BASH_SOURCE[0]}))/../../3rdparty/toolbox/functions.sh"
+config "$(dirname $0)/config.sh"
+config "$(dirname $0)/config-local.sh"
+
+#
+# Config variables
+#
+# None
+
+#
+#
+#
+if [ -z "$1" ]; then
+    echo "usage: $(basename $0) <FILESYSTEM_IMAGE>"
+    exit 1
+fi
+
+FILESYSTEM_IMAGE=$1
+
+if [ ! \( -b "$FILESYSTEM_IMAGE" -o -f "$FILESYSTEM_IMAGE" \) ]; then
+    echo "E: Invalid FILESYSTEM_IMAGE (not a block device or file): $FILESYSTEM_IMAGE"
+    exit 1
+fi
+
+if [ -z "$QEMU" ]; then
+    QEMU=qemu-system-x86_64
+fi
+
+echo "To (SSH) connect to running Debian, do"
+echo
+echo "    ssh localhost -p 5555"
+echo
+echo "Local port 7000 is forwarded to running Debian, port 7000,"
+echo "you may use this for example for remote debugging using"
+echo "gdbserver:"
+echo
+echo "    (gdb) target remote localhost:7000"
+echo
+if ! confirm "Continue"; then
+    exit 0
+fi
+
+typeset qemu_img_fmt=$(qemu-img info $1 | grep 'file format' | cut -d ' '  -f 3)
+
+${QEMU} -nographic \
+    -accel kvm \
+    -m 2G \
+    -smp cpus=4 \
+    -drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd \
+    -drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_VARS_4M.fd \
+    -drive if=none,id=disk0,file=${FILESYSTEM_IMAGE},format=$qemu_img_fmt \
+    -device virtio-blk-pci,drive=disk0 \
+    -netdev user,id=net0,hostfwd=tcp::5555-:22,hostfwd=tcp::7000-:7000 \
+    -device virtio-net-pci,netdev=net0
