@@ -1,0 +1,30 @@
+image root.ext4 {
+        temporary = true
+        size = 120%
+        ext4 {}
+        mountpoint = "/"
+}
+
+image hdd.img {
+        size = @CONFIG_IMAGE_SIZE@
+
+        hdimage {
+                partition-table-type = gpt
+        }
+
+        partition boot {
+                #partition-type = 7
+                #partition-type-uuid = L
+                offset = 1024kB
+                bootable = yes
+                image = "boot.hfs"
+
+        }
+
+        partition root {
+                #partition-type = 0x83
+                partition-type-uuid = L
+                autoresize = true
+                image = "root.ext4"
+        }
+}

@@ -37,6 +37,13 @@ They're provided for convenience. Use at your own risk.
     ```
     sudo apt-get install mmdebstrap qemu-user-static qemu-system-misc binfmt-support debian-ports-archive-keyring rsync device-tree-compiler genimage genext2fs dosfstools guestfish guestfs-tools
     ```
+
+    For Apple PowerMac G5 also:
+
+    ```
+    sudo apt-get install hfsutils hfsprogs parted
+    ```
+
  2) Install build tools for each architecture you want to build image for:
 
     ```
